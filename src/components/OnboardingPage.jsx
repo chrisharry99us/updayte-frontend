@@ -85,7 +85,7 @@ export default function OnboardingPage({ onComplete }) {
     setError(null)
     setStep(STEP.SAVING)
     try {
-      const result = await confirmOnboarding(proposal.extracted, selectedTopics)
+      const result = await confirmOnboarding(selectedTopics)
       if (result.detail) throw new Error(result.detail)
       setStep(STEP.DONE)
       setTimeout(() => onComplete(), 1200)
