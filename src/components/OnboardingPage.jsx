@@ -4,14 +4,46 @@ import { generateOnboarding, confirmOnboarding } from '../api'
 const STEP = { INPUT: 'input', LOADING: 'loading', REVIEW: 'review', SAVING: 'saving', DONE: 'done' }
 
 const DOMAIN_LABELS = {
-  'AI/ML':           'AI / Machine Learning',
-  'data_science':    'Data Science',
-  'ml_engineering':  'ML Engineering',
-  'software':        'Software Engineering',
-  'web_dev':         'Web Development',
-  'startups':        'Startups & Industry',
-  'security':        'Security',
-  'hardware':        'Hardware & Compute',
+  'AI/ML': 'AI / Machine Learning',
+  data_science: 'Data Science',
+  ml_engineering: 'ML Engineering',
+  data_platforms: 'Data Platforms & Warehousing',
+  software: 'Software Engineering',
+  web_dev: 'Web Development',
+  ui_engineering: 'UI Engineering & Design Systems',
+  mobile_dev: 'Mobile Development',
+  game_tech: 'Game Technology',
+  cloud_platforms: 'Cloud & Infrastructure',
+  devops_sre: 'DevOps, SRE & CI/CD',
+  databases: 'Databases & Storage',
+  apis_platforms: 'APIs & Platform Engineering',
+  networking: 'Networking & Edge',
+  qa_testing: 'QA & Test Automation',
+  embedded_iot: 'Embedded Systems & IoT',
+  developer_tools: 'Developer Tools & DX',
+  security: 'Security',
+  hardware: 'Hardware & Compute',
+  startups: 'Startups & Industry',
+  clinical_care: 'Clinical Care & Practice',
+  health_policy_regulation: 'Health Policy & Regulation',
+  health_it_systems: 'Health IT & Interoperability',
+  medical_devices_diagnostics: 'Medical Devices & Diagnostics',
+  pharma_biotech: 'Pharma & Biotech Research',
+  public_health: 'Public & Population Health',
+  capital_markets: 'Capital Markets & Investment Banking',
+  banking_retail_commercial: 'Retail & Commercial Banking',
+  corporate_finance_treasury: 'Corporate Finance, FP&A & Treasury',
+  risk_compliance_finance: 'Financial Risk & Compliance',
+  fintech_payments: 'Fintech & Payments',
+  accounting_audit_tax: 'Accounting, Audit & Tax',
+  wealth_asset_management: 'Wealth & Asset Management',
+  macro_economics_policy: 'Macro, Rates & Policy',
+}
+
+const FIELD_LABELS = {
+  technology: 'Technology & IT',
+  healthcare: 'Healthcare & Life Sciences',
+  finance: 'Finance & Banking',
 }
 
 function Spinner() {
@@ -40,7 +72,6 @@ export default function OnboardingPage({ onComplete }) {
     setStep(STEP.LOADING)
     try {
       const data = await generateOnboarding(rawInput.trim())
-      if (data.detail) throw new Error(data.detail)
 
       // Pre-select all topics
       const initialSelected = {}
@@ -124,9 +155,13 @@ export default function OnboardingPage({ onComplete }) {
               onChange={e => setRawInput(e.target.value)}
               disabled={step === STEP.LOADING}
             />
+            {error && (
+              <p className="mt-3 text-sm text-red-300 whitespace-pre-wrap rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2">
+                {error}
+              </p>
+            )}
             <div className="flex items-center justify-between mt-4">
               <span className="text-xs text-zinc-600">{rawInput.length} / 2000</span>
-              {error && <span className="text-xs text-red-400">{error}</span>}
               <button
                 onClick={handleGenerate}
                 disabled={step === STEP.LOADING}
@@ -143,6 +178,11 @@ export default function OnboardingPage({ onComplete }) {
           <div>
             {/* Extracted context pill */}
             <div className="flex flex-wrap gap-2 mb-6">
+              {proposal.extracted.primary_field && (
+                <span className="px-3 py-1 bg-emerald-500/15 text-emerald-300 rounded-full text-xs font-medium">
+                  {FIELD_LABELS[proposal.extracted.primary_field] || proposal.extracted.primary_field}
+                </span>
+              )}
               {proposal.extracted.roles?.map(r => (
                 <span key={r} className="px-3 py-1 bg-indigo-500/15 text-indigo-300 rounded-full text-xs font-medium">
                   {r.replace(/_/g, ' ')}
