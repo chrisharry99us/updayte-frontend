@@ -30,4 +30,15 @@ export const fetchFollowing    = (topic) => request('/feeds/following/' + encode
 export const fetchStatus       = ()      => request('/ingest/status')
 export const starArticle       = (id)    => request('/feedback/star',   { method: 'POST', body: JSON.stringify({ article_id: id }) })
 export const unstarArticle     = (id)    => request('/feedback/unstar', { method: 'POST', body: JSON.stringify({ article_id: id }) })
-export const followTopic       = (t, d)  => request('/feedback/follow', { method: 'POST', body: JSON.stringify({ topic: t, domain: d || 'AI' }) })
+export const followTopic       = (t, d)  => request('/feedback/follow', { method: 'POST', body: JSON.stringify({ topic: t, domain: d || 'AI/ML' }) })
+
+// Onboarding
+export const fetchOnboardingStatus = () => request('/onboarding/status')
+export const generateOnboarding    = (raw) => request('/onboarding/generate', {
+  method: 'POST',
+  body: JSON.stringify({ raw_input: raw }),
+})
+export const confirmOnboarding = (extracted, selectedTopics) => request('/onboarding/confirm', {
+  method: 'POST',
+  body: JSON.stringify({ extracted, selected_topics: selectedTopics }),
+})
